@@ -1,0 +1,19 @@
+.num-input,
+.operator {
+  font-size: 72px;
+  width: 2em;
+  text-align: center;
+}
+
+.num-input::-webkit-outer-spin-button,
+.num-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.num-input.incorrect {
+  background-color: lightpink;
+}
+
+.operator {
+  border: none;
+}
