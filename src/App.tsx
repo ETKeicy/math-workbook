@@ -9,7 +9,7 @@ const App: Component<ParentProps> = (props) => {
   return (
     <>
     <nav>
-      <A href="/">かけざん</A>
+      <A href="/math-workbook">かけざん</A>
     </nav>
     {props.children}
   </>
