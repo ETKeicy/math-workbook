@@ -1,7 +1,11 @@
+.equation {
+  padding: 12px 0;
+}
+
 .num-input,
 .operator {
-  font-size: 72px;
-  width: 2em;
+  font-size: 82px;
+  width: 1.6em;
   text-align: center;
 }
 

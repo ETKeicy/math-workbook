@@ -1,6 +1,4 @@
 import type { Component, ParentProps } from 'solid-js';
-import { A } from "@solidjs/router";
-
 
 import logo from './logo.svg';
 import styles from './App.module.css';
@@ -8,8 +6,10 @@ import styles from './App.module.css';
 const App: Component<ParentProps> = (props) => {
   return (
     <>
-    <nav>
-      <A href="/math-workbook">かけざん</A>
+    <nav class={styles.nav}>
+      <a class={styles.nav_item} href='/'>かけざん</a>
+      {/* <a class={styles.nav_item} href='/divide'>わりざん</a> */}
+      <label class={styles.nav_static_item}>の れんしゅう</label>
     </nav>
     {props.children}
   </>
