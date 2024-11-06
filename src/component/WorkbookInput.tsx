@@ -33,9 +33,10 @@ function calc(left: number, right: number, operator: Operator) {
 export const Equation: Component<ParentProps<{left: number, right: number, operator: Operator, answer: (result: AnswerResult) => void}>> = (props) => {
   const [correct, setCorrect] = createSignal(true);
   const inputhandler = (event: WorkInputEvent) => {
+    if (event.target.value.length === 0) return;
+    const value = Number(event.target.value);
     const correct_value = calc(props.left, props.right, props.operator);
 
-    const value = Number(event.target.value);
     const isCorrect = value === correct_value;
     setCorrect(isCorrect);
     props.answer.call(null, {
@@ -57,7 +58,9 @@ export const Equation: Component<ParentProps<{left: number, right: number, opera
       <input class='num-input' classList={{
         'correct': correct(),
         'incorrect': !correct()
-      }} type='number' onblur={inputhandler} />
+      }} type='number' onblur={inputhandler} onKeyPress={e => {
+        if (e.key === 'Enter') inputhandler( { currentTarget: e.currentTarget, target: e.currentTarget, isTrusted: e.isTrusted });
+      }} />
     </div>
   );
 };

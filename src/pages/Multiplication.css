@@ -19,15 +19,20 @@
 
 .mode_nav {
   display: flex;
-  height: 8vh;
+  height: 8dvh;
 }
 
 .mode_nav_item {
   text-decoration: none;
   text-align: left;
   font-size: 32px;
-  line-height: 8vh;
+  line-height: 8dvh;
   flex-grow: 1;
   padding: 0 12px;
   border: none;
+}
+
+.mode_nav_sub {
+  display: flex;
+  height: 8dvh;
 }
