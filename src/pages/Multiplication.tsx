@@ -6,7 +6,6 @@ import { History } from '../utils/history';
 import { Equation, Operator } from '../component/WorkbookInput';
 import { ScoreBoard } from '../component/WorkbookResult';
 import './Multiplication.css'
-import { M } from 'vite/dist/node/types.d-aGj9QkWt';
 
 type question = {
   left: number,
@@ -22,8 +21,15 @@ enum Mode {
   Card,
   Free
 }
+enum ModeSub {
+  Obverse,
+  Reverse,
+  Shuffle
+} 
+
 const [mode, setMode] = createSignal(Mode.Card);
-const modeChange = (newMode: Mode) => {
+const [modeSub, setModeSub] = createSignal(ModeSub.Obverse);
+const refresh = (newMode: Mode = mode()) => {
   setMode(newMode);
   History.init();
 
@@ -33,36 +39,31 @@ const modeChange = (newMode: Mode) => {
 
   switch(newMode) {
     case Mode.Card:
-      const sorted = expressions;
+      const sorted = modeSub() === ModeSub.Shuffle ? shuffleArray(expressions)
+                      : modeSub() === ModeSub.Reverse ? expressions.reverse()
+                      : expressions;
       setCardList({
         count: sorted.length,
-        generator: (function* () {
-          yield* sorted;
-        })()
+        generator: (function* () { yield* sorted; })()
       });
       break;
     case Mode.Free:
       setCardList({
         count: expressions.length,
-        generator: (function* () {
-          yield* shuffleArray(expressions);
-        })()
+        generator: (function* () { yield* shuffleArray(expressions); })()
       });
       break;
   }
 
   ask();
 }
-enum ModeSub {
-
-} 
 
 const ask = () => {
   if (cardList().count === 0) return;
 
   let card = cardList().generator.next();
   if (card.done) {
-    return modeChange(mode());
+    return refresh();
   }
 
   if (card.value !== undefined) {
@@ -81,31 +82,15 @@ const targets = numbers.map(number => {
   return { number, enable, setEnable }
 });
 
-// const next = () => {
-//   const expressions =
-//     targets
-//       .filter(target => target.enable())
-//       .flatMap(target => numbers.map( number => ({ left: target.number, right: number })));
-
-//   console.log(cardList().generator.next())
-
-//   if (expressions.length === 0) return;
-
-//   const sorted = shuffleArray(expressions);
-//   setLeft( sorted[0].left);
-//   setRight( sorted[0].right)
-// }
-
-
 const App: Component = () => {
   History.init();
-  modeChange(mode());
+  refresh();
   return (
     <div style={{display: 'flex', height: '90dvh'}}>
       <div style={{width: '12em', display: 'flex', "flex-direction": 'column'}}>
         <For each={targets}>{(target) => (
             <label class='number_line'>
-              <input type='checkbox' checked={target.enable()} on:change={ e => (target.setEnable(e.target.checked), modeChange(mode())) }></input>
+              <input type='checkbox' checked={target.enable()} on:change={ e => (target.setEnable(e.target.checked), refresh()) }></input>
               <span>{target.number} のだん</span>
             </label>
           )}
@@ -114,22 +99,22 @@ const App: Component = () => {
       <div style={{flex: 1}}>
 
         <div class='mode_nav'>
-          <button on:click={() => modeChange(Mode.Card)} class='mode_nav_item'>九九カード</button>
-          <button on:click={() => modeChange(Mode.Free)} class='mode_nav_item'>けいさん</button>
+          <button on:click={() => refresh(Mode.Card)} class='mode_nav_item' classList={{ active: mode() === Mode.Card }}>九九カード</button>
+          <button on:click={() => refresh(Mode.Free)} class='mode_nav_item' classList={{ active: mode() === Mode.Free }}>けいさん</button>
         </div>
 
         <div class='mode_nav_sub'>
-          <Show when={false}>
-            <label>
-              <input type='radio'></input>
-              <span>まえから</span>
+          <Show when={mode() === Mode.Card}>
+            <label class='mode_nav_sub_item'>
+              <input type='radio' name='order' checked={true} on:click={() => (setModeSub(ModeSub.Obverse), refresh())} />
+              <span>うえから</span>
             </label>
-            <label>
-              <input type='radio'></input>
-              <span>うしろから</span>
+            <label class='mode_nav_sub_item'>
+              <input type='radio' name='order' on:click={() => (setModeSub(ModeSub.Reverse), refresh())} />
+              <span>したから</span>
             </label>
-            <label>
-              <input type='radio'></input>
+            <label class='mode_nav_sub_item'>
+              <input type='radio' name='order' on:click={() => (setModeSub(ModeSub.Shuffle), refresh())} />
               <span>まぜて</span>
             </label>
           </Show>
@@ -140,7 +125,12 @@ const App: Component = () => {
           if(answer.isCorrect) ask();
         }} />
 
-        <ScoreBoard total={History.total()} consecutive={History.consecutive()} />
+        <Show when={mode() === Mode.Card} fallback={(
+          <ScoreBoard total={History.total()} consecutive={History.consecutive()} />
+        )}>
+          <ScoreBoard total={History.total()} consecutive={History.consecutive()} wip={{value: History.total(), total: cardList().count}} />
+        </Show>
+        
       </div>
     </div>
   );

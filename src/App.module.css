@@ -1,13 +1,13 @@
 .nav {
   display: flex;
-  height: 10vh;
+  height: 10dvh;
   align-items: center;
 }
 
 .nav_item {
   text-decoration: none;
   font-size: 32px;
-  line-height: 10vh;
+  line-height: 10dvh;
   flex-grow: 1;
   padding: 0 8px;
 }
@@ -22,7 +22,7 @@
 
 .nav_static_item {
   font-size: 32px;
-  line-height: 10vh;
+  line-height: 10dvh;
   flex-grow: 5;
   padding: 0 8px;
   text-align: right;

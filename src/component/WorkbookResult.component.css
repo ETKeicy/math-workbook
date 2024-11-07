@@ -1,27 +1,66 @@
 .score_board {
+  position: relative;
   display: flex;
+  flex-wrap: wrap;
+  margin: 0 12px;
   justify-content: space-evenly;
+  margin-top: 80px;
+  background-color: burlywood;
+  border: 8px solid rgba(255, 228, 196, 0.788);
+  box-shadow:
+    inset 2px 2px 12px rgb(0 0 0 / 30%),
+    10px 5px 5px rgb(0 0 0 / 20%);
 }
 
-.score_board_item {
+.score_board .pin {
+  position: absolute;
+  top: -50px;
+  width: 24px;
+  height: 24px;
+  background-color: rgb(139, 0, 0);
+  border: 4px solid indianred ;
+  border-radius: 50%;
+  box-shadow: 4px 4px 5px rgb(139 0 0 / 20%);
+}
+
+.score_board .rope {
+  content: '';
+  position: absolute;
+  top: -40px;
+  border-top: 4px dashed darkred;
+  border-left: 4px dashed darkred;
+  border-start-start-radius: 25px;
+  width: 70px;
+  height: 70px;
+  transform: rotate(45deg);
+  z-index: -1;
+}
+
+.score_board_item,
+.score_board_item_long {
   position: relative;
   margin: 15px auto;
   padding: 10px;
   width: 45%;
   background: #fce8e3;
   box-sizing: border-box;
-  font-size: 24px;
+  font-size: 22px;
+  box-shadow: 6px 3px 5px rgb(0 0 0 / 20%);
+}
+
+.score_board_item_long {
+  width: 95%;
 }
 
 .ribbon {  
   display: inline-block;
   position: absolute;
   top: 0;
-  right: 10px;
+  right: 6px;
   margin: 0;
   padding: 6px 0;
   z-index: 2;
-  width: 40px;
+  width: 32px;
   text-align: center;
   font-size: 16px;
   color: white !important;
@@ -35,7 +74,7 @@
   top: 100%;
   height: 0;
   width: 0;
-  border-left: 20px solid #ff785b;
-  border-right: 20px solid #ff785b;
+  border-left: 16px solid #ff785b;
+  border-right: 16px solid #ff785b;
   border-bottom: 14px solid transparent;
 }
