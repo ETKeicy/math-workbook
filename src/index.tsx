@@ -15,8 +15,9 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   );
 }
 
+const base = import.meta.env.BASE_URL;
 render(() => ( 
 <Router root={App}>
-  <Route path="/" component={Multiplication} />
+  <Route path={base} component={Multiplication} />
 </Router>)
 , root!);

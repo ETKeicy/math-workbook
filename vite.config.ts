@@ -17,6 +17,6 @@ export default defineConfig(config => {
       target: 'esnext',
       outDir: './docs'
     },
-    base
+    base: '/math-workbook/'
   }
 });
